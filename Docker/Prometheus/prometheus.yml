@@ -18,14 +18,14 @@ rule_files:
 # Here it's Prometheus itself.
 scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-  - job_name:   'py_push_test'
+  - job_name:   'fife_reports_tracker'
 
     scrape_interval:    5s
 
     static_configs:
-# prometheus server should scrape pushgateway service port 9091.  Note that this is NOT localhost.  Why?
+# prometheus server should scrape pushgateway service port 9091.  Note that this is NOT localhost because we want to look at the pushgateway service in the Docker stack.  
       - targets: ['pushgateway:9091']
         labels:
-            group: 'test_curl' 
+            group: 'fife_reports' 
 
     honor_labels:   true

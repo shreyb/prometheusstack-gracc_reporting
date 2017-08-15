@@ -4,7 +4,7 @@ services:
 # Prometheus server broadcasting on 9090 
         image:  "prom/prometheus"
         volumes:    
-            - /Users/sbhat/PrometheusTestStuff/Docker/Prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+            - $HOME/prometheusteststuff/Docker/Prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
         ports:
             - "9090:9090"
         networks:
