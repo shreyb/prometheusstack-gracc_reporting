@@ -19,14 +19,22 @@ registry = CollectorRegistry()
 
 
 def check_prom_server():
-    """ Look at "prometheus:9090" for current METRIC value """
-    r = requests.get("{0}:{1}".format(PROM_HOST, PROM_PORT))
-
-    if not r.status_code == requests.codes.ok:
-        print r.status_code
-        return False
-
-    return True
+    """Check that "prometheus:9090" is responding""" 
+     
+    # Retry loop
+    for try_count in range(5):
+        try:
+            r = requests.get("{0}:{1}".format(PROM_HOST, PROM_PORT))
+            if r.status_code == requests.codes.ok:
+            	return True 
+        except requests.exceptions.ConnectionError:
+            print "Couldn't connect to prometheus server.  Will retry {0} more time(s)".format(str(5 - try_count - 1))
+	    sleep(10)
+        except:
+	    pass
+    
+    return False
+            
 
 
 def pushtogateway():
