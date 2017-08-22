@@ -6,19 +6,21 @@ services:
         volumes:    
             - $HOME/prometheus-docker/Prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
             - /etc/localtime:/etc/localtime
-        ports:
-            - "9090:9090"
-        networks:
-            - pushnet 
+#        ports:
+#            - "9090:9090"
+#        networks:
+#            - pushnet 
+        network_mode: "host"
     pushgateway:
 # pushgateway service broadcasting on 9091
         image:  "prom/pushgateway"
         volumes:
             - /etc/localtime:/etc/localtime
-        ports:
-            - "9091:9091"
-        networks:
-            - pushnet
+#        ports:
+#            - "9091:9091"
+#        networks:
+#            - pushnet
+        network_mode: "host"
     resetmetric:
 # pushgateway reset daily
         build: ./ResetMetric  
@@ -27,7 +29,8 @@ services:
             - "pushgateway"
         volumes:
             - /etc/localtime:/etc/localtime
-        networks:
-            - pushnet
-networks:
-    pushnet:
+#        networks:
+#            - pushnet
+        network_mode: "host"
+#networks:
+#    pushnet:

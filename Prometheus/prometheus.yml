@@ -24,7 +24,7 @@ scrape_configs:
 
     static_configs:
 # prometheus server should scrape pushgateway service port 9091.  Note that this is NOT localhost because we want to look at the pushgateway service in the Docker stack.  
-      - targets: ['pushgateway:9091']
+      - targets: ['localhost:9091']
         labels:
             group: 'fife_reports' 
 

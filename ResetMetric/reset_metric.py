@@ -10,9 +10,9 @@ midnight on each day, it'll reset the metric specified in METRIC.
 Meant to be run within docker container
 """
 
-PROM_HOST = 'http://prometheus'
+PROM_HOST = 'http://localhost'
 PROM_PORT = 9090
-PUSH_HOST = 'http://pushgateway'
+PUSH_HOST = 'http://localhost'
 PUSH_PORT = 9091
 METRIC = 'num_reports_ran_today'
 registry = CollectorRegistry()
