@@ -19,5 +19,15 @@ services:
             - "9091:9091"
         networks:
             - pushnet
+    resetmetric:
+# pushgateway reset daily
+        build: ./ResetMetric  
+        depends_on:
+            - "prometheus"
+            - "pushgateway"
+        volumes:
+            - /etc/localtime:/etc/localtime
+        networks:
+            - pushnet
 networks:
     pushnet:
