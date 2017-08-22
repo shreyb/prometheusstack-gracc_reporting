@@ -1,0 +1,23 @@
+version:    "3"
+services:
+    prometheus:
+# Prometheus server broadcasting on 9090 
+        image:  "prom/prometheus"
+        volumes:    
+            - $HOME/prometheus-docker/Prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+            - /etc/localtime:/etc/localtime
+        ports:
+            - "9090:9090"
+        networks:
+            - pushnet 
+    pushgateway:
+# pushgateway service broadcasting on 9091
+        image:  "prom/pushgateway"
+        volumes:
+            - /etc/localtime:/etc/localtime
+        ports:
+            - "9091:9091"
+        networks:
+            - pushnet
+networks:
+    pushnet:
