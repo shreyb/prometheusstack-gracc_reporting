@@ -18,14 +18,51 @@ rule_files:
 # Here it's Prometheus itself.
 scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-  - job_name:   'py_push_test'
-
-    scrape_interval:    5s
-
+#  - job_name:   'py_push_test'
+#
+#    scrape_interval:    5s
+#
+#    static_configs:
+## prometheus server should scrape pushgateway service port 9091.  Note that this is NOT localhost.  Why?
+#      - targets: ['pushgateway:9091']
+#        labels:
+#            group: 'test_curl' 
+#
+#    honor_labels:   true
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]  # Look for a HTTP 200 response.
     static_configs:
-# prometheus server should scrape pushgateway service port 9091.  Note that this is NOT localhost.  Why?
-      - targets: ['pushgateway:9091']
-        labels:
-            group: 'test_curl' 
+      - targets:
+        - http://prometheus.io    # Target to probe with http.
+        - https://prometheus.io   # Target to probe with https.
+        - http://example.com:8080 # Target to probe with http on port 8080.
+        - https://www.google.com
+        - https://landscape.fnal.gov
+        - https://ferry.fnal.gov:8443/ping
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox:9115  # The blackbox exporter's real hostname:port.
+    metric_relabel_configs:
+#      - target_label: test_instance
+#        source_labels: ['__name__', instance]
+#        regex: 'probe_success.+;(.*:)(\/){2}([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)'
+#        replacement: '$3'
+      - target_label: test_instance
+        source_labels: ['__name__', instance]
+        regex: 'probe_success;(.*:)(\/){2}([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)'
+        replacement: '$3'
+      - target_label: test_instance_2
+        source_labels: ['__name__', instance]
+        regex: 'probe_success;https\:\/\/www\.google\.com'
+        replacement: 'google'
+      - target_label: test_instance_3
+        source_labels: [instance]
+        regex: 'https\:\/\/www\.google\.com'
+        replacement: 'google'
 
-    honor_labels:   true

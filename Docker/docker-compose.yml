@@ -8,13 +8,25 @@ services:
         ports:
             - "9090:9090"
         networks:
-            - pushnet 
+            - frontend 
     pushgateway:
 # pushgateway service broadcasting on 9091
         image:  "prom/pushgateway"
         ports:
             - "9091:9091"
         networks:
-            - pushnet
+            - frontend 
+    blackbox:
+# blackbox exporter broadcasting on 9116.  Changed port because prometheus container is pulling from 9115.
+        image: prom/blackbox-exporter:master
+        volumes:
+            - /Users/sbhat/PrometheusTestStuff/Docker/Blackbox:/config
+        command:
+            - --config.file=/config/blackbox.yml
+        ports:
+            - "9116:9115"
+        networks:
+            - frontend
+
 networks:
-    pushnet:
+    frontend:
