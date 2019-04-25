@@ -2,13 +2,14 @@
 FROM centos:7
 
 # Set up libraries
-# Get PIP.  We need it for now to grab PyPI's urllib3, since SL7 and CentOS' python-urllib3 is broken for SSL
+# Get PIP.  
 RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 RUN yum -y install python-pip && pip install -U pip 
 RUN pip install prometheus_client && pip install requests
 
 # Copy in python executable
-COPY update_info_2.py /tmp/update_info.py
+COPY reset_metric.py /tmp/reset_metric.py
 
-CMD ["python", "/tmp/update_info.py"]
+# Run the executable
+CMD ["python", "/tmp/reset_metric.py"]
 

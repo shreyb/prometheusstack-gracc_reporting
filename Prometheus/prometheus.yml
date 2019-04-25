@@ -65,4 +65,11 @@ scrape_configs:
         source_labels: [instance]
         regex: 'https\:\/\/www\.google\.com'
         replacement: 'google'
+  - job_name:   'fife_reports_tracker'
+    scrape_interval:    5s
+    static_configs:
+# prometheus server should scrape pushgateway service port 9091.  Note that this is NOT localhost because we want to look at the pushgateway service in the Docker stack.  
+      - targets: ['pushgateway:9091']
+        labels:
+            group: 'fife_reports' 
 
